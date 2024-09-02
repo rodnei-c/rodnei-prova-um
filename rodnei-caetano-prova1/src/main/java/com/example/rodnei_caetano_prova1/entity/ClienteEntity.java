@@ -8,6 +8,7 @@ import com.example.rodnei_caetano_prova1.dto.ClienteDto;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -30,10 +31,10 @@ public class ClienteEntity {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Nonnull
+	@Column(nullable = false)
 	private String nome;
 	
-	@Nonnull
+	@Column(nullable = false, unique = true)
 	private String email;
 	
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)

@@ -21,27 +21,27 @@ public class ClienteController {
 
 	@Autowired
 	private ClienteService clienteService;
-	
+
 	@PostMapping("/cadastrarCliente")
 	public ClienteDto cadastrarCliente(@RequestBody ClienteDto cadastraCliente) {
 		return clienteService.cadastrarCliente(cadastraCliente);
 	}
-	
+
 	@GetMapping("/buscarClientes")
-	public List<ClienteDto> buscarClientes(){
+	public List<ClienteDto> buscarClientes() {
 		return clienteService.buscarClientes();
-		
+
 	}
-	
+
 	@GetMapping("/{id}")
-	public Optional<ClienteDto> buscarPorId(@PathVariable Long id){
+	public Optional<ClienteDto> buscarPorId(@PathVariable Long id) {
 		Optional<ClienteDto> cliente = clienteService.findById(id);
 		return cliente;
 	}
-	
+
 	@PutMapping("/{id}")
 	public ClienteDto atualizarCliente(@PathVariable Long id, @RequestBody ClienteDto clienteAtualizado) {
 		return clienteService.updateCliente(id, clienteAtualizado);
 	}
-	
+
 }

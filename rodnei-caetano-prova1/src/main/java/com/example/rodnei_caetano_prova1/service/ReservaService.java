@@ -15,6 +15,6 @@ public interface ReservaService {
 
 	String verifyTable(Integer mesa);
 
-	ReservaDto updateStatus(StatusEnum status);
+	ReservaDto updateStatus(Long id, ReservaDto reserva);
 	
 }

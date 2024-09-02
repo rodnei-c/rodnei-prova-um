@@ -7,6 +7,7 @@ import com.example.rodnei_caetano_prova1.enuns.StatusEnum;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,31 +30,44 @@ public class ReservaEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	@Nonnull
+
+	@Column(nullable = false)
 	private LocalDate dataReserva;
-	
-	@Nonnull
+
+	@Column(nullable = false)
 	private Integer numeroPessoas;
-	
-	@Nonnull
+
+	@Column(nullable = false)
 	private Integer numeroMesa;
-	
+
 	@Enumerated(EnumType.ORDINAL)
 	private StatusEnum status;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	@JoinColumn(name = "cliente_id", nullable = false)
 	private ClienteEntity cliente;
-	
+
 	public ReservaEntity(ReservaDto dto, ClienteEntity cliente) {
 		this.id = dto.getId();
 		this.cliente = cliente;
 		this.dataReserva = dto.getDataReserva();
 		this.numeroMesa = dto.getNumeroMesa();
 		this.numeroPessoas = dto.getNumeroPessoas();
-		this.status = dto.getStatus();
+		this.status = StatusEnum.FEITA;
 	}
-	
-	
+
+	public ReservaEntity AtualizarStatus(ReservaDto atualizaReserva) {
+		this.status = atualizaReserva.getStatus();
+//		validaCancelamento(atualizaReserva);
+		return this;
+	}
+
+//	private void validaCancelamento(ReservaDto atualizaReserva) {
+//		LocalDate dtCancel = atualizaReserva.getDataReserva();
+//		if(atualizaReserva.getDataReserva().isBefore(dtCancel.minusDays(1))) {
+//			if(atualizaReserva.getStatus().equals(StatusEnum.CANCELADA)) {
+//				throw new IllegalArgumentException("Não é possível cancelar a reserva");
+//			}
+//		}
+//	}
 }
