@@ -56,18 +56,10 @@ public class ReservaEntity {
 		this.status = StatusEnum.FEITA;
 	}
 
-	public ReservaEntity AtualizarStatus(ReservaDto atualizaReserva) {
-		this.status = atualizaReserva.getStatus();
-//		validaCancelamento(atualizaReserva);
+	public ReservaEntity AtualizarStatus(StatusEnum status) {
+		this.status = status;
+//		validaCancelamento(status);
 		return this;
 	}
 
-//	private void validaCancelamento(ReservaDto atualizaReserva) {
-//		LocalDate dtCancel = atualizaReserva.getDataReserva();
-//		if(atualizaReserva.getDataReserva().isBefore(dtCancel.minusDays(1))) {
-//			if(atualizaReserva.getStatus().equals(StatusEnum.CANCELADA)) {
-//				throw new IllegalArgumentException("Não é possível cancelar a reserva");
-//			}
-//		}
-//	}
 }

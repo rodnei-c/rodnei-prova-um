@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.example.rodnei_caetano_prova1.dto.ReservaDto;
 import com.example.rodnei_caetano_prova1.entity.ClienteEntity;
 import com.example.rodnei_caetano_prova1.entity.ReservaEntity;
+import com.example.rodnei_caetano_prova1.enuns.StatusEnum;
 import com.example.rodnei_caetano_prova1.repository.ReservaRepository;
 import com.example.rodnei_caetano_prova1.service.ClienteService;
 import com.example.rodnei_caetano_prova1.service.ReservaService;
@@ -36,6 +37,51 @@ public class ReservaServiceImpl implements ReservaService {
 		validaDatasDiferentes(cadastraReserva);
 		ReservaEntity persistedEntity = reservaRepo.save(reservaEntity);
 		return new ReservaDto(persistedEntity);
+	}
+
+	@Override
+	public List<ReservaDto> buscarReservas() {
+
+		return reservaRepo.findAll().stream().map(ReservaDto::new).toList();
+	}
+
+
+	@Override
+	public List<ReservaDto> findByClient(Long cliente) {
+		return reservaRepo.findAll().stream().map(ReservaDto::new)
+				.filter(reserva -> reserva.getCliente().equals(cliente))
+				.toList();                                                                            
+	}
+
+
+	@Override
+	public String verifyTable(Integer mesa) {
+		var reservaMesa = reservaRepo.findAll().stream().map(ReservaDto::new).filter(reserva -> reserva.getNumeroMesa().equals(mesa)
+				&& !reserva.getStatus().equals(StatusEnum.FEITA)).toList();
+		if(reservaMesa.isEmpty()) {
+			return "Essa mesa está disponível";
+		}
+		
+		return "Essa mesa não está disponível";
+	}
+
+
+	@Override
+	public ReservaDto updateStatus(Long id, StatusEnum status) {
+		Optional<ReservaEntity> atualizaStatus = reservaRepo.findById(id);
+		if(atualizaStatus.isPresent()) {
+			atualizaStatus.get().AtualizarStatus(status);	
+			var persistedEntity = reservaRepo.save(atualizaStatus.get());
+			try {
+				validaCancelamento(atualizaStatus.get().getDataReserva());
+				validaConclusao(atualizaStatus.get().getDataReserva());
+			} catch (Exception e) {
+				e.getMessage();
+			}
+			return new ReservaDto(persistedEntity);
+		}
+		return null;
+		
 	}
 	
 	private void validaDatasDiferentes(ReservaDto reserva) throws Exception {
@@ -70,55 +116,17 @@ public class ReservaServiceImpl implements ReservaService {
 	private ClienteEntity validaCliente(Long id) throws Exception{
 		return clienteService.buscaId(id).orElseThrow(() -> new Exception("cliente não existe"));
 	}
-
-	@Override
-	public List<ReservaDto> buscarReservas() {
-
-		return reservaRepo.findAll().stream().map(ReservaDto::new).toList();
-	}
-
-
-	@Override
-	public List<ReservaDto> findByClient(Long cliente) {
-		return reservaRepo.findAll().stream().map(ReservaDto::new)
-				.filter(reserva -> reserva.getCliente().equals(cliente))
-				.toList();                                                                            
-	}
-
-
-	@Override
-	public String verifyTable(Integer mesa) {
-		var reservaMesa = reservaRepo.findAll().stream().map(ReservaDto::new).filter(reserva -> reserva.getNumeroMesa().equals(mesa)).toList();
-		if(reservaMesa.isEmpty()) {
-			return "Essa mesa está disponível";
+	
+	private void validaCancelamento(LocalDate dataReserva) throws Exception {
+		LocalDate dtCancel = LocalDate.now().plusDays(1);
+		if (!dataReserva.isAfter(dtCancel)) {
+			throw new Exception("Só é possível cancelar com um dia de antecedência");
 		}
-		
-		return "Essa mesa não está disponível";
-	}
-
-
-	@Override
-	public ReservaDto updateStatus(Long id, ReservaDto reserva) {
-		Optional<ReservaEntity> atualizaStatus = reservaRepo.findById(id);
-		if(atualizaStatus.isPresent()) {
-			atualizaStatus.get().AtualizarStatus(reserva);		
-			var persistedEntity = reservaRepo.save(atualizaStatus.get());
-			try {
-				validaCancelamento(reserva);
-			} catch (Exception e) {
-				e.getMessage();
-			}
-			return new ReservaDto(persistedEntity);
-		}
-		return null;
 	}
 	
-	private void validaCancelamento(ReservaDto reserva) throws Exception {
-		LocalDate dtCancel = reserva.getDataReserva();
-		if(reserva.getDataReserva().isBefore(dtCancel.minusDays(1))) {
-			if(reserva.getStatus().equals(reserva.getStatus().CANCELADA)) {
-				throw new Exception("Não é possível cancelar a reserva");
-			}
+	private void validaConclusao(LocalDate dataReserva) throws Exception {
+		if(dataReserva.isAfter(LocalDate.now())) {
+			throw new Exception("Não é possível concluir uma reserva que não ocorreu");
 		}
 	}
 	

@@ -48,7 +48,7 @@ public class ReservaController {
 
 	@PutMapping("/alterarStatus/{id}")
 	public ReservaDto alterarStatus(@PathVariable("id") Long id, @RequestBody ReservaDto reserva) {
-		return reservaService.updateStatus(id, reserva);
+		return reservaService.updateStatus(id, reserva.getStatus());
 	}
 
 }
