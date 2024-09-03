@@ -18,10 +18,11 @@ public class ReservaDto {
 
 	private Long id;
 	private LocalDate dataReserva;
-	private Integer numeroPessoas;
-	private Integer numeroMesa;
+	private Integer quantidade_pessoas;
 	private StatusEnum status;
-	private Long cliente;
+	private Long cliente_id;
+	private Long mesa_id;
+	private String observacao;
 	
 	public ReservaDto(ReservaEntity entity) {
 		this.id = entity.getId();

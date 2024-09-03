@@ -57,7 +57,7 @@ public class ReservaServiceImpl implements ReservaService {
 	@Override
 	public String verifyTable(Integer mesa) {
 		var reservaMesa = reservaRepo.findAll().stream().map(ReservaDto::new).filter(reserva -> reserva.getNumeroMesa().equals(mesa)
-				&& !reserva.getStatus().equals(StatusEnum.FEITA)).toList();
+				&& !reserva.getStatus().equals(StatusEnum.AGENDADA)).toList();
 		if(reservaMesa.isEmpty()) {
 			return "Essa mesa está disponível";
 		}
@@ -67,17 +67,17 @@ public class ReservaServiceImpl implements ReservaService {
 
 
 	@Override
-	public ReservaDto updateStatus(Long id, StatusEnum status) {
+	public ReservaDto updateStatus(Long id, StatusEnum status) throws Exception {
 		Optional<ReservaEntity> atualizaStatus = reservaRepo.findById(id);
+		
 		if(atualizaStatus.isPresent()) {
-			atualizaStatus.get().AtualizarStatus(status);	
-			var persistedEntity = reservaRepo.save(atualizaStatus.get());
-			try {
-				validaCancelamento(atualizaStatus.get().getDataReserva());
-				validaConclusao(atualizaStatus.get().getDataReserva());
-			} catch (Exception e) {
-				e.getMessage();
+			if(status.equals(StatusEnum.CANCELADA)) {
+			validaCancelamento(atualizaStatus.get().getDataReserva());
+			} else if(status.equals(StatusEnum.CONCLUIDA)) {
+			validaConclusao(atualizaStatus.get().getDataReserva());
 			}
+			atualizaStatus.get().AtualizarStatus(status);
+			var persistedEntity = reservaRepo.save(atualizaStatus.get());
 			return new ReservaDto(persistedEntity);
 		}
 		return null;
@@ -86,7 +86,7 @@ public class ReservaServiceImpl implements ReservaService {
 	
 	private void validaDatasDiferentes(ReservaDto reserva) throws Exception {
 		List<ReservaDto> listaData = reservaRepo.findAll().stream().filter(e -> e.getDataReserva().equals(reserva.getDataReserva())
-				&& e.getNumeroMesa().equals(reserva.getNumeroMesa()) && e.getStatus().equals(reserva.getStatus().FEITA))
+				&& e.getNumeroMesa().equals(reserva.getNumeroMesa()) && e.getStatus().equals(reserva.getStatus().AGENDADA))
 		.map(ReservaDto::new).toList();
 		if(!listaData.isEmpty()) {
 			throw new Exception("Não é possível reservas a mesma mesa no mesmo dia");
@@ -118,8 +118,8 @@ public class ReservaServiceImpl implements ReservaService {
 	}
 	
 	private void validaCancelamento(LocalDate dataReserva) throws Exception {
-		LocalDate dtCancel = LocalDate.now().plusDays(1);
-		if (!dataReserva.isAfter(dtCancel)) {
+//		LocalDate dtCancel = LocalDate.now().plusDays(1);
+		if (dataReserva.isBefore(LocalDate.now()) || dataReserva.equals(LocalDate.now())) {
 			throw new Exception("Só é possível cancelar com um dia de antecedência");
 		}
 	}

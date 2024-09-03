@@ -47,8 +47,12 @@ public class ReservaController {
 	}
 
 	@PutMapping("/alterarStatus/{id}")
-	public ReservaDto alterarStatus(@PathVariable("id") Long id, @RequestBody ReservaDto reserva) {
-		return reservaService.updateStatus(id, reserva.getStatus());
+	public ResponseEntity<?> alterarStatus(@PathVariable("id") Long id, @RequestBody ReservaDto reserva) throws Exception {
+		try {
+		return ResponseEntity.ok(reservaService.updateStatus(id, reserva.getStatus()));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 }
