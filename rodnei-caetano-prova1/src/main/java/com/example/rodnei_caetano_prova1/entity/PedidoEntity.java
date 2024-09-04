@@ -2,6 +2,8 @@ package com.example.rodnei_caetano_prova1.entity;
 
 import java.math.BigDecimal;
 
+import com.example.rodnei_caetano_prova1.dto.PedidoDto;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,4 +37,10 @@ public class PedidoEntity {
 	@JoinColumn(name = "reserva_id", nullable = false)
 	private ReservaEntity reserva_id;
 	
+	public PedidoEntity(PedidoDto dto, ReservaEntity reserva) {
+		this.descricao = dto.getDescricao();
+		this.id = dto.getId();
+		this.reserva_id = reserva;
+		this.valor = dto.getValor();
+	}
 }

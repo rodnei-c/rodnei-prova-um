@@ -118,7 +118,6 @@ public class ReservaServiceImpl implements ReservaService {
 	}
 	
 	private void validaCancelamento(LocalDate dataReserva) throws Exception {
-//		LocalDate dtCancel = LocalDate.now().plusDays(1);
 		if (dataReserva.isBefore(LocalDate.now()) || dataReserva.equals(LocalDate.now())) {
 			throw new Exception("Só é possível cancelar com um dia de antecedência");
 		}

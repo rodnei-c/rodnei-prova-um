@@ -26,10 +26,11 @@ public class ReservaDto {
 	
 	public ReservaDto(ReservaEntity entity) {
 		this.id = entity.getId();
-		this.cliente = entity.getCliente().getId();
+		this.cliente_id = entity.getCliente_id().getId();
 		this.dataReserva = entity.getDataReserva();
-		this.numeroMesa = entity.getNumeroMesa();
-		this.numeroPessoas = entity.getNumeroPessoas();
+		this.mesa_id = entity.getMesa_id().getId();
+		this.observacao = entity.getObservacao();
+		this.quantidade_pessoas = entity.getQuantidade_pessoas();
 		this.status = entity.getStatus();
 	}
 	

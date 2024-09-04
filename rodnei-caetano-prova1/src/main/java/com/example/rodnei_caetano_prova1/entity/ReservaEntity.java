@@ -56,12 +56,14 @@ public class ReservaEntity {
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<PedidoEntity> pedidos;
 
-	public ReservaEntity(ReservaDto dto, ClienteEntity cliente) {
+	public ReservaEntity(ReservaDto dto, ClienteEntity cliente, MesaEntity mesa) {
 		this.id = dto.getId();
 		this.cliente_id = cliente;
 		this.dataReserva = dto.getDataReserva();
-		this.quantidade_pessoas = dto.getNumeroPessoas();
+		this.quantidade_pessoas = dto.getQuantidade_pessoas();
+		this.mesa_id = mesa;
 		this.status = StatusEnum.AGENDADA;
+		this.observacao = dto.getObservacao();
 	}
 
 	public ReservaEntity AtualizarStatus(StatusEnum status) {

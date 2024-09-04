@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.example.rodnei_caetano_prova1.dto.RestauranteDto;
 import com.example.rodnei_caetano_prova1.enuns.TipoComidaEnum;
 
 import jakarta.persistence.CascadeType;
@@ -49,6 +50,12 @@ public class RestauranteEntity {
 	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<MesaEntity> mesas;
 	
-	
+	public RestauranteEntity(RestauranteDto dto) {
+		this.id = dto.getId();
+		this.cnpj = dto.getCnpj();
+		this.estrela = dto.getEstrela();
+		this.nome = dto.getNome();
+		this.tipo_comida = dto.getTipo_comida();
+	}
 	
 }

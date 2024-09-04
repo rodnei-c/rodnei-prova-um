@@ -46,7 +46,18 @@ public class FuncionarioEntity extends PessoaEntity{
 	private RestauranteEntity restaurante_id;
 	
 	public FuncionarioEntity(FuncionarioDto dto, RestauranteEntity restaurante) {
-		
+		this.carga_horaria = dto.getCarga_horaria();
+		this.cargo = dto.getCargo();
+		this.cpf = dto.getCpf();
+		this.data_admissao = dto.getData_admissao();
+		this.data_nascimento = dto.getData_nascimento();
+		this.id = dto.getId();
+		this.nome = dto.getNome();
+		this.restaurante_id = restaurante;
+		this.salario = dto.getSalario();
+		this.sexo = dto.getSexo();
+		this.sobrenome = dto.getSobrenome();
+		this.telefone = dto.getTelefone();
 	}
 	
 }

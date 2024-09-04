@@ -2,6 +2,8 @@ package com.example.rodnei_caetano_prova1.entity;
 
 import java.util.List;
 
+import com.example.rodnei_caetano_prova1.dto.MesaDto;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,4 +40,11 @@ public class MesaEntity {
 	
 	@OneToMany(mappedBy = "mesa", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<ReservaEntity> reservas;
+	
+	public MesaEntity(MesaDto dto, RestauranteEntity restaurante) {
+		this.capacidade_pessoas = dto.getCapacidade_pessoas();
+		this.id = dto.getId();
+		this.numero = dto.getNumero();
+		this.restaurante_id = restaurante;
+	}
 }
