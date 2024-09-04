@@ -11,7 +11,7 @@ import com.example.rodnei_caetano_prova1.entity.ReservaEntity;
 @Repository
 public interface ReservaRepository extends JpaRepository<ReservaEntity, Long>{
 
-//	@Query("SELECT reserva.data_reserva FROM reserva")
-//	List<ReservaEntity> listaDatas();
+	
+	
 	
 }

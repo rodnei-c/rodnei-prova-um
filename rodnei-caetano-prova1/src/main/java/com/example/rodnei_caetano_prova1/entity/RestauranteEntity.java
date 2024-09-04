@@ -10,6 +10,8 @@ import com.example.rodnei_caetano_prova1.enuns.TipoComidaEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,7 +28,7 @@ import lombok.NoArgsConstructor;
 public class RestauranteEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(nullable = false)
@@ -38,16 +40,16 @@ public class RestauranteEntity {
 	@Column(nullable = false)
 	private Integer estrela;
 	
-	@Column(nullable = false)
+	@Enumerated(EnumType.ORDINAL)
 	private TipoComidaEnum tipo_comida;
 	
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "restaurante_id", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<ClienteEntity> clientes;
 	
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "restaurante_id", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<FuncionarioEntity> funcionarios;
 	
-	@OneToMany(mappedBy = "restaurante", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "restaurante_id", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<MesaEntity> mesas;
 	
 	public RestauranteEntity(RestauranteDto dto) {

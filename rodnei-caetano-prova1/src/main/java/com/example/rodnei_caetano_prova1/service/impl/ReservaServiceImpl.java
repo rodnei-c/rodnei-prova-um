@@ -8,10 +8,12 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import com.example.rodnei_caetano_prova1.dto.ReservaDto;
 import com.example.rodnei_caetano_prova1.entity.ClienteEntity;
+import com.example.rodnei_caetano_prova1.entity.MesaEntity;
 import com.example.rodnei_caetano_prova1.entity.ReservaEntity;
 import com.example.rodnei_caetano_prova1.enuns.StatusEnum;
 import com.example.rodnei_caetano_prova1.repository.ReservaRepository;
 import com.example.rodnei_caetano_prova1.service.ClienteService;
+import com.example.rodnei_caetano_prova1.service.MesaService;
 import com.example.rodnei_caetano_prova1.service.ReservaService;
 
 @Primary
@@ -23,20 +25,28 @@ public class ReservaServiceImpl implements ReservaService {
 	
 	@Autowired
 	private ClienteService clienteService;
+	
+	@Autowired
+	private MesaService mesaService;
 
 	LocalDate dtAtual = LocalDate.now();
 	
 	@Override
 	public ReservaDto cadastrarReserva(ReservaDto cadastraReserva) throws Exception {
 		
-		var cliente = validaCliente(cadastraReserva.getCliente());
-		var reservaEntity = new ReservaEntity(cadastraReserva, cliente);
+		var cliente = validaCliente(cadastraReserva.getCliente_id());
+		var mesa = validaMesa(cadastraReserva.getMesa_id());
+		var reservaEntity = new ReservaEntity(cadastraReserva, cliente, mesa);
 		validaReserva(cadastraReserva);
 		validaPessoas(cadastraReserva);
 		validaMesaQuant(cadastraReserva);
 		validaDatasDiferentes(cadastraReserva);
 		ReservaEntity persistedEntity = reservaRepo.save(reservaEntity);
 		return new ReservaDto(persistedEntity);
+	}
+	
+	public MesaEntity validaMesa(Long id) {
+		return mesaService.buscaId(id).orElseThrow(() -> new RuntimeException("Não achou"));
 	}
 
 	@Override
@@ -48,21 +58,23 @@ public class ReservaServiceImpl implements ReservaService {
 
 	@Override
 	public List<ReservaDto> findByClient(Long cliente) {
-		return reservaRepo.findAll().stream().map(ReservaDto::new)
-				.filter(reserva -> reserva.getCliente().equals(cliente))
-				.toList();                                                                            
+//		return reservaRepo.findAll().stream().map(ReservaDto::new)
+//				.filter(reserva -> reserva.getCliente().equals(cliente))
+//				.toList();        
+		return null;
 	}
 
 
 	@Override
 	public String verifyTable(Integer mesa) {
-		var reservaMesa = reservaRepo.findAll().stream().map(ReservaDto::new).filter(reserva -> reserva.getNumeroMesa().equals(mesa)
-				&& !reserva.getStatus().equals(StatusEnum.AGENDADA)).toList();
-		if(reservaMesa.isEmpty()) {
-			return "Essa mesa está disponível";
-		}
-		
-		return "Essa mesa não está disponível";
+//		var reservaMesa = reservaRepo.findAll().stream().map(ReservaDto::new).filter(reserva -> reserva.getNumeroMesa().equals(mesa)
+//				&& !reserva.getStatus().equals(StatusEnum.AGENDADA)).toList();
+//		if(reservaMesa.isEmpty()) {
+//			return "Essa mesa está disponível";
+//		}
+//		
+//		return "Essa mesa não está disponível";
+		return null;
 	}
 
 
@@ -85,12 +97,12 @@ public class ReservaServiceImpl implements ReservaService {
 	}
 	
 	private void validaDatasDiferentes(ReservaDto reserva) throws Exception {
-		List<ReservaDto> listaData = reservaRepo.findAll().stream().filter(e -> e.getDataReserva().equals(reserva.getDataReserva())
-				&& e.getNumeroMesa().equals(reserva.getNumeroMesa()) && e.getStatus().equals(reserva.getStatus().AGENDADA))
-		.map(ReservaDto::new).toList();
-		if(!listaData.isEmpty()) {
-			throw new Exception("Não é possível reservas a mesma mesa no mesmo dia");
-		}
+//		List<ReservaDto> listaData = reservaRepo.findAll().stream().filter(e -> e.getDataReserva().equals(reserva.getDataReserva())
+//				&& e.getNumeroMesa().equals(reserva.getNumeroMesa()) && e.getStatus().equals(reserva.getStatus().AGENDADA))
+//		.map(ReservaDto::new).toList();
+//		if(!listaData.isEmpty()) {
+//			throw new Exception("Não é possível reservas a mesma mesa no mesmo dia");
+//		}
 	};
 
 	private void validaReserva(ReservaDto reserva) throws Exception {
@@ -100,17 +112,17 @@ public class ReservaServiceImpl implements ReservaService {
 	}
 	
 	private void validaPessoas(ReservaDto reserva) throws Exception {
-		if(reserva.getNumeroPessoas() < 1) {
-			throw new Exception("Para reservar uma mesa precisa de no mínimo uma pessoa");
-		} else if(reserva.getNumeroPessoas() > 10) {
-			throw new Exception("Uma mesa pode ter no máximo 10 pessoas");
-		}
+//		if(reserva.getNumeroPessoas() < 1) {
+//			throw new Exception("Para reservar uma mesa precisa de no mínimo uma pessoa");
+//		} else if(reserva.getNumeroPessoas() > 10) {
+//			throw new Exception("Uma mesa pode ter no máximo 10 pessoas");
+//		}
 	}
 	
 	private void validaMesaQuant(ReservaDto reserva) throws Exception {
-		if(reserva.getNumeroMesa() < 1 || reserva.getNumeroMesa() > 20) {
-			throw new Exception("Está mesa não existe");
-		}
+//		if(reserva.getNumeroMesa() < 1 || reserva.getNumeroMesa() > 20) {
+//			throw new Exception("Está mesa não existe");
+//		}
 	}
 	
 	private ClienteEntity validaCliente(Long id) throws Exception{
@@ -127,6 +139,11 @@ public class ReservaServiceImpl implements ReservaService {
 		if(dataReserva.isAfter(LocalDate.now())) {
 			throw new Exception("Não é possível concluir uma reserva que não ocorreu");
 		}
+	}
+
+	@Override
+	public Optional<ReservaEntity> buscaId(Long id) {
+		return reservaRepo.findById(id);
 	}
 	
 	

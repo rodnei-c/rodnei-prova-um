@@ -53,7 +53,7 @@ public class ReservaEntity {
 	@JoinColumn(name = "restaurante_id", nullable = false)
 	private MesaEntity mesa_id;
 	
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "reserva_id", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<PedidoEntity> pedidos;
 
 	public ReservaEntity(ReservaDto dto, ClienteEntity cliente, MesaEntity mesa) {

@@ -38,7 +38,7 @@ public class MesaEntity {
 	@JoinColumn(name = "restaurante_id", nullable = false)
 	private RestauranteEntity restaurante_id;
 	
-	@OneToMany(mappedBy = "mesa", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "mesa_id", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<ReservaEntity> reservas;
 	
 	public MesaEntity(MesaDto dto, RestauranteEntity restaurante) {

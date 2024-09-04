@@ -7,5 +7,7 @@ import com.example.rodnei_caetano_prova1.entity.RestauranteEntity;
 
 @Repository
 public interface RestauranteRepository extends JpaRepository<RestauranteEntity, Long>{
-
+	
+	
+	
 }

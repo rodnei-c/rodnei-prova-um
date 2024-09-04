@@ -1,8 +1,10 @@
 package com.example.rodnei_caetano_prova1.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.rodnei_caetano_prova1.dto.ReservaDto;
+import com.example.rodnei_caetano_prova1.entity.ReservaEntity;
 import com.example.rodnei_caetano_prova1.enuns.StatusEnum;
 
 public interface ReservaService {
@@ -16,5 +18,7 @@ public interface ReservaService {
 	String verifyTable(Integer mesa);
 
 	ReservaDto updateStatus(Long id, StatusEnum status) throws Exception;
+	
+	Optional<ReservaEntity> buscaId(Long id);
 	
 }

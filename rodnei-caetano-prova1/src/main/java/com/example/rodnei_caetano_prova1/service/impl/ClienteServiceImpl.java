@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.rodnei_caetano_prova1.dto.ClienteDto;
 import com.example.rodnei_caetano_prova1.entity.ClienteEntity;
+import com.example.rodnei_caetano_prova1.entity.RestauranteEntity;
 import com.example.rodnei_caetano_prova1.repository.ClienteRepository;
 import com.example.rodnei_caetano_prova1.service.ClienteService;
+import com.example.rodnei_caetano_prova1.service.RestauranteService;
 
 @Primary
 @Service
@@ -18,12 +20,21 @@ public class ClienteServiceImpl implements ClienteService{
 	
 	@Autowired
 	private ClienteRepository clienteRepo;
+	
+	@Autowired
+	private RestauranteService restauranteService;
 
 	@Override
 	public ClienteDto cadastrarCliente(ClienteDto cadastraCliente) {
-		var clienteEntity = new ClienteEntity(cadastraCliente);
+		var restaurante = validaRestaurante(cadastraCliente.getRestaurante_id());
+		var clienteEntity = new ClienteEntity(cadastraCliente, restaurante);
 		clienteRepo.save(clienteEntity);
 		return new ClienteDto(clienteEntity);
+	}
+	
+	private RestauranteEntity validaRestaurante(Long id) {
+		return restauranteService.buscaPorId(id).orElseThrow(() -> new RuntimeException("Não achou"));
+		
 	}
 
 	@Override

@@ -47,7 +47,7 @@ public class ClienteEntity extends PessoaEntity{
 	@JoinColumn(name = "restaurante_id", nullable = false)
 	private RestauranteEntity restaurante_id;
 	
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "cliente_id", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
 	private List<ReservaEntity> reservas;
 	
 	public ClienteEntity(ClienteDto dto, RestauranteEntity restaurante) {
