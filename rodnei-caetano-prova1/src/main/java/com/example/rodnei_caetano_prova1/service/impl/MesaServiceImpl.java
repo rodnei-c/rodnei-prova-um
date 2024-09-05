@@ -1,9 +1,12 @@
 package com.example.rodnei_caetano_prova1.service.impl;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.rodnei_caetano_prova1.dto.MesaDto;
@@ -39,6 +42,16 @@ public class MesaServiceImpl implements MesaService{
 	public Optional<MesaEntity> buscaId(Long id) {
 		return mesaRepo.findById(id);
 	}
-	
-	
+
+	@Override
+	public List<MesaDto> listarMesas(Pageable pageable, String searchTerm) {
+		return mesaRepo.buscarMesas(pageable, searchTerm).stream().toList();
+	}
+
+	@Override
+	public List<MesaDto> listarMesasDisponiveis(Pageable pageable, String searchTerm, LocalDate data, Integer quant_pessoas) {
+		return mesaRepo.buscaMesasDisponiveis(pageable, searchTerm, data, quant_pessoas).stream().toList();
+	}
+
+
 }

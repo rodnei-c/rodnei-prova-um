@@ -1,9 +1,11 @@
 package com.example.rodnei_caetano_prova1.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.rodnei_caetano_prova1.dto.RestauranteDto;
@@ -28,6 +30,11 @@ public class RestauranteServiceImpl implements RestauranteService{
 	@Override
 	public Optional<RestauranteEntity> buscaPorId(Long id) {
 		return restauranteRepo.findById(id);
+	}
+
+	@Override
+	public List<RestauranteDto> listarRestaurantes(Pageable pageable, String searchTerm) {
+		return restauranteRepo.buscaRestaurantes(pageable, searchTerm).stream().toList();
 	}
 
 }

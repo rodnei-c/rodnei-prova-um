@@ -50,7 +50,7 @@ public class ReservaEntity {
 	private ClienteEntity cliente_id;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-	@JoinColumn(name = "restaurante_id", nullable = false)
+	@JoinColumn(name = "mesa_id", nullable = false)
 	private MesaEntity mesa_id;
 	
 	@OneToMany(mappedBy = "reserva_id", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)

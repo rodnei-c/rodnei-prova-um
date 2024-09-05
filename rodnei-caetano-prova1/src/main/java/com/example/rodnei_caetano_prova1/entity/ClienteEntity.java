@@ -54,7 +54,7 @@ public class ClienteEntity extends PessoaEntity{
 		this.id = dto.getId();
 		this.nome = dto.getNome();
 		this.cpf = dto.getCpf();
-		this.data_cadastro = dto.getData_cadastro();
+		this.data_cadastro = LocalDate.now();
 		this.data_nascimento = dto.getData_nascimento();
 		this.quantidade_valor_gasto = dto.getQuantidade_valor_gasto();
 		this.sobrenome = dto.getSobrenome();

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.example.rodnei_caetano_prova1.entity.RestauranteEntity;
 
 @Repository
-public interface RestauranteRepository extends JpaRepository<RestauranteEntity, Long>{
+public interface RestauranteRepository extends JpaRepository<RestauranteEntity, Long>, RestauranteRepositoryCustom{
 	
 	
 	

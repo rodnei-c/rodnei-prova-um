@@ -37,16 +37,20 @@ public class ReservaServiceImpl implements ReservaService {
 		var cliente = validaCliente(cadastraReserva.getCliente_id());
 		var mesa = validaMesa(cadastraReserva.getMesa_id());
 		var reservaEntity = new ReservaEntity(cadastraReserva, cliente, mesa);
-		validaReserva(cadastraReserva);
-		validaPessoas(cadastraReserva);
-		validaMesaQuant(cadastraReserva);
-		validaDatasDiferentes(cadastraReserva);
-		ReservaEntity persistedEntity = reservaRepo.save(reservaEntity);
-		return new ReservaDto(persistedEntity);
+//		validaReserva(cadastraReserva);
+//		validaPessoas(cadastraReserva);
+//		validaMesaQuant(cadastraReserva);
+//		validaDatasDiferentes(cadastraReserva);
+		reservaRepo.save(reservaEntity);
+		return new ReservaDto(reservaEntity);
 	}
-	
-	public MesaEntity validaMesa(Long id) {
-		return mesaService.buscaId(id).orElseThrow(() -> new RuntimeException("Não achou"));
+
+	private ClienteEntity validaCliente(Long id) throws Exception{
+		return clienteService.buscaId(id).orElseThrow(() -> new Exception("cliente não existe"));
+	}
+
+	public MesaEntity validaMesa(Long id) throws Exception{
+		return mesaService.buscaId(id).orElseThrow(() -> new Exception("Não achou"));
 	}
 
 	@Override
@@ -123,10 +127,6 @@ public class ReservaServiceImpl implements ReservaService {
 //		if(reserva.getNumeroMesa() < 1 || reserva.getNumeroMesa() > 20) {
 //			throw new Exception("Está mesa não existe");
 //		}
-	}
-	
-	private ClienteEntity validaCliente(Long id) throws Exception{
-		return clienteService.buscaId(id).orElseThrow(() -> new Exception("cliente não existe"));
 	}
 	
 	private void validaCancelamento(LocalDate dataReserva) throws Exception {
