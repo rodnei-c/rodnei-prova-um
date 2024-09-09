@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReservaRepositoryCustom {
 
-    Page<ReservaDto> buscaObservacao(Pageable pageable, Long idRestaurante, String descricao);
+    Page<ReservaDto> buscaObservacao(Pageable pageable, String searchTerm, Long idRestaurante, String descricao);
 
 }
