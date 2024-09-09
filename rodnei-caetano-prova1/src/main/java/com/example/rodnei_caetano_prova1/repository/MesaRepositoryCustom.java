@@ -12,9 +12,7 @@ import com.example.rodnei_caetano_prova1.entity.MesaEntity;
 
 public interface MesaRepositoryCustom {
 
-	Page<MesaDto> buscaPorCapacidadePessoa(Pageable pageable, String searchTerm, Long restauranteId, Integer capacidadePessoas);
-
-    Page<MesaDto> buscaMesasDisponiveis(Pageable pageable, String searchTerm, LocalDate data, Integer quant_pessoas);
+	Page<MesaDto> buscaPorCapacidadePessoa(Pageable pageable, String searchTerm, Long restauranteId, Integer capacidadePessoas, LocalDate data);
 
 	Page<MesaDto> buscarMesas(Pageable pageable, String searchTerm);
 	

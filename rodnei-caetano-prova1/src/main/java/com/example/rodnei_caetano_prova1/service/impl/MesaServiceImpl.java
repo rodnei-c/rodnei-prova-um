@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -49,8 +50,8 @@ public class MesaServiceImpl implements MesaService{
 	}
 
 	@Override
-	public List<MesaDto> listarMesasDisponiveis(Pageable pageable, String searchTerm, LocalDate data, Integer quant_pessoas) {
-		return mesaRepo.buscaMesasDisponiveis(pageable, searchTerm, data, quant_pessoas).stream().toList();
+	public List<MesaDto> buscaPorCapacidadePessoa(Pageable pageable, String searchTerm, Long restauranteId, Integer capacidadePessoas, LocalDate data) {
+		return mesaRepo.buscaPorCapacidadePessoa(pageable, searchTerm, restauranteId, capacidadePessoas, data).stream().toList();
 	}
 
 

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.example.rodnei_caetano_prova1.dto.MesaDto;
 import com.example.rodnei_caetano_prova1.entity.MesaEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface MesaService {
@@ -16,6 +17,6 @@ public interface MesaService {
 
 	List<MesaDto> listarMesas(Pageable pageable, String searchTerm);
 
-	List<MesaDto> listarMesasDisponiveis(Pageable pageable, String searchTerm, LocalDate data, Integer quant_pessoas);
-	
+	List<MesaDto> buscaPorCapacidadePessoa(Pageable pageable, String searchTerm, Long restauranteId, Integer capacidadePessoas, LocalDate data);
+
 }

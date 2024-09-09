@@ -29,13 +29,15 @@ public class MesaController {
 		return mesaService.listarMesas(Pageable.ofSize(size).withPage(page), searchTerm);
 	}
 
-	@GetMapping("/mesas-disponiveis")
-	public List<MesaDto> listarMesasDisponiveis(@RequestParam(defaultValue = "0", required = false) Integer page,
+	@GetMapping("/mesas-por-capacidade")
+	public List<MesaDto> listarPorCapacidade(@RequestParam(defaultValue = "0", required = false) Integer page,
 												@RequestParam(defaultValue = "10", required = false) Integer size,
 												@RequestParam(required = false) String searchTerm,
-												@RequestParam LocalDate data,
-												@RequestParam Integer quant_pessoas){
-		return mesaService.listarMesasDisponiveis(Pageable.ofSize(size).withPage(page), searchTerm, data, quant_pessoas);
+											 	@RequestParam Long restauranteId,
+												@RequestParam Integer quantPessoas,
+											 	@RequestParam LocalDate data
+											 	){
+		return mesaService.buscaPorCapacidadePessoa(Pageable.ofSize(size).withPage(page), searchTerm, restauranteId, quantPessoas, data);
 	}
 	
 }
