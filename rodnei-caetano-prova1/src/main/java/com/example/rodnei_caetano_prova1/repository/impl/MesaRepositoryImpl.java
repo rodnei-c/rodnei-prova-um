@@ -7,6 +7,7 @@ import com.example.rodnei_caetano_prova1.dto.MesaDto;
 import com.example.rodnei_caetano_prova1.entity.MesaEntity;
 import com.example.rodnei_caetano_prova1.entity.QMesaEntity;
 import com.example.rodnei_caetano_prova1.entity.QReservaEntity;
+
 import com.example.rodnei_caetano_prova1.entity.QRestauranteEntity;
 import com.example.rodnei_caetano_prova1.enuns.StatusEnum;
 import com.example.rodnei_caetano_prova1.repository.MesaRepositoryCustom;
@@ -29,27 +30,19 @@ public class MesaRepositoryImpl implements MesaRepositoryCustom {
     final QRestauranteEntity restaurante = QRestauranteEntity.restauranteEntity;
 
     @Override
-    public Page<MesaDto> buscaPorCapacidadePessoa(Pageable pageable, String searchTerm, Long restauranteId, Integer capacidadePessoas) {
+    public Page<MesaDto> buscaPorCapacidadePessoa(Pageable pageable, String searchTerm, Long restauranteId, Integer capacidadePessoas, LocalDate data) {
 
         JPAQuery<MesaDto> query = new JPAQuery<>(em);
 
-        query.select(Projections.constructor(MesaDto.class, mesa)).distinct().from(restaurante)
-                .join(restaurante).where(restaurante.id.eq(restauranteId)
-                        .and(mesa.capacidade_pessoas.eq(capacidadePessoas)));
+        query.select(Projections.constructor(MesaDto.class, mesa))
+                .distinct()
+                .from(restaurante)
+                .join(restaurante.mesas, mesa)
+                .leftJoin(mesa.reservas, reserva)
+                .where(restaurante.id.eq(restauranteId)
+                        .and(mesa.capacidade_pessoas.goe(capacidadePessoas))
+                        .and(reserva.dataReserva.eq(data).not().or(reserva.status.eq(StatusEnum.CANCELADA))));
 
-        query.limit(pageable.getPageSize());
-        query.offset(pageable.getOffset());
-
-        return new PageImpl<>(query.fetch(), pageable, query.fetchCount());
-    }
-
-    @Override
-    public Page<MesaDto> buscaMesasDisponiveis(Pageable pageable, String searchTerm, LocalDate data, Integer quant_pessoas) {
-        JPAQuery<MesaDto> query = new JPAQuery<>(em);
-
-        query.select(Projections.constructor(MesaDto.class, mesa)).from(mesa).join(reserva)
-                        .where(reserva.dataReserva.eq(data).and(reserva.quantidade_pessoas.eq(quant_pessoas))
-                                .and(reserva.status.notIn(StatusEnum.AGENDADA)));
 
         query.limit(pageable.getPageSize());
         query.offset(pageable.getOffset());

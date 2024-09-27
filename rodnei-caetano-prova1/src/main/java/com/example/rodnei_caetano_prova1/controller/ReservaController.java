@@ -3,14 +3,9 @@ package com.example.rodnei_caetano_prova1.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.rodnei_caetano_prova1.dto.ReservaDto;
 import com.example.rodnei_caetano_prova1.service.ReservaService;
@@ -53,6 +48,15 @@ public class ReservaController {
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+	}
+
+	@GetMapping("/busca-observacao")
+	public List<ReservaDto> buscaObservacao(@RequestParam(defaultValue = "0", required = false) Integer page,
+											@RequestParam(defaultValue = "10", required = false) Integer size,
+											@RequestParam(required = false) String searchTerm,
+											@RequestParam Long restauranteId,
+											@RequestParam String descricao){
+		return reservaService.buscaObservacao(Pageable.ofSize(size).withPage(page), searchTerm, restauranteId, descricao);
 	}
 
 }

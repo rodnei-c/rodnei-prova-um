@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.rodnei_caetano_prova1.dto.ReservaDto;
 import com.example.rodnei_caetano_prova1.entity.ClienteEntity;
@@ -145,7 +146,11 @@ public class ReservaServiceImpl implements ReservaService {
 	public Optional<ReservaEntity> buscaId(Long id) {
 		return reservaRepo.findById(id);
 	}
-	
-	
-	
+
+	@Override
+	public List<ReservaDto> buscaObservacao(Pageable pageable, String searchTerm, Long idRestaurante, String descricao) {
+		return reservaRepo.buscaObservacao(pageable, searchTerm, idRestaurante, descricao).stream().toList();
+	}
+
+
 }
